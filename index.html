@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>Time sheet Demo</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<script src="index.js"></script>
+
+<body onload="runtimeInstantiate();">
+
+<form>
+
+<!--     <input type="file" name="inputfile"
+
+            id="inputfile"> 
+
+    <br> 
+
+    <pre id="output"></pre> 
+
+    <script type="text/javascript"> 
+
+        document.getElementById('inputfile') 
+
+            .addEventListener('change', function() {​​​​ 
+
+            var fr=new FileReader(); 
+
+            fr.onload=function(){​​​​ 
+
+                document.getElementById('output') 
+
+                        .textContent=fr.result; 
+
+            }​​​​ 
+
+            fr.readAsText(this.files[0]); 
+
+        }​​​​) //onload="runtimeInstantiate();"
+
+    </script>  -->
+
+    <table border="1" id="mainTBL">
+
+        <thead>
+
+            <tr>
+
+                <th>
+
+                    Date
+
+                </th>
+
+                <th>
+
+                    Start Day
+
+                </th>
+
+                <th>
+
+                    Start Lunch
+
+                </th>
+
+                <th>
+
+                    End Lunch
+
+                </th>
+
+                <th>
+
+                    End Day
+
+                </th>
+
+                <th>
+
+                    Hours Lunch
+
+                </th>
+
+                <th>
+
+                    Hours Total
+
+                </th>
+
+            </tr>
+
+        </thead>         <tr>
+
+            <td colspan="5">
+
+            </td>
+
+            <td>
+
+                Total Hours
+
+            </td>
+
+            <td>
+
+                Total Cost
+
+            </td>
+
+        </tr>         <tr>
+
+            <td colspan="5">
+
+            </td>
+
+            <td id="total_hours">             </td>
+
+            <td id="total_cost">             </td>
+
+        </tr>
+
+    </table> 
+</form> 
+<input type="submit" onclick="submitTimesheetEntities()">
+
+</body>
+
+
+</html>
+
