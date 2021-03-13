@@ -106,6 +106,21 @@ for (i = 0; i < entities.length; i++) {
 }
 
 }
+
+function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+}
+
 function readTextFile(file)
 {
     var rawFile = new XMLHttpRequest();
@@ -133,9 +148,9 @@ var row = table.insertRow(rowCount);
 var cell1 = row.insertCell(0);
 var element1 = document.createElement("input");
 element1.type = "date";
-element1.name="date";// + intRowNum;
-element1.value = "2021-03-13";
-//element1.onchange="recompute2('date_" + intRowNum + "')";
+element1.name= 'd' + intRowNum;
+element1.value = formatDate(Date.now());
+
 cell1.appendChild(element1);
 
 var cell2 = row.insertCell(1);
@@ -143,7 +158,7 @@ var element2 = document.createElement("input");
 element2.type = "time";
 element2.name="time";// + intRowNum;
 //element2.value = "07:00";
-//element2.onchange="recompute2('start_" + intRowNum + "')";
+element2.onchange = (e) => recomputeEndHours(e, rowCount);
 cell2.appendChild(element2);
 
 var cell3 = row.insertCell(2);
@@ -151,7 +166,7 @@ var element3 = document.createElement("input");
 element3.type = "time";
 element3.name="lunchStartTime";// + intRowNum;
 //element3.value = "11:00";
-//element3.onchange="recompute2('lunchStart_" + intRowNum + "')";
+element3.onchange = (e) => recomputeEndHours(e, rowCount);
 cell3.appendChild(element3);
 
 var cell4 = row.insertCell(3);
@@ -159,27 +174,27 @@ var element4 = document.createElement("input");
 element4.type = "time";
 element4.name="lunchEndTime";// + intRowNum;
 //element4.value = "12:00";
-//element4.onchange="recompute2('lunchEnd_" + intRowNum + "')";
+element4.onchange = (e) => recomputeEndHours(e, rowCount);
 cell4.appendChild(element4);
 
 var cell5 = row.insertCell(4);
 var element5 = document.createElement("input");
 element5.type = "time";
-element5.name="end_" + intRowNum;
+element5.name="end_" + rowCount;
 //element5.value = "17:00";
-//element5.onchange="recompute2('end_" + intRowNum + "')";
+element5.onchange = (e) => recomputeEndHours(e, rowCount);
 cell5.appendChild(element5);
 var cell6 = row.insertCell(5);
 var element6 = document.createElement("input");
 element6.type = "number";
-element6.name="hoursLunch_" + intRowNum;
-//element6.onchange="recompute2('hoursLunch_" + intRowNum + "')";
+element6.name="hoursLunch_" + rowCount;
+element6.onchange = (e) => recomputeEndHours(e, rowCount);
 cell6.appendChild(element6);
 var cell7 = row.insertCell(6);
 var element7 = document.createElement("input");
 element7.type = "number";
-element7.name="hoursTotal_" + intRowNum;
-//element7.onchange="recompute2('hoursTotal_" + intRowNum + "')";
+element7.name="hoursTotal_" + rowCount;
+element7.onchange = (e) => recomputeEndHours(e, rowCount);
 cell7.appendChild(element7);
 //var cell8 = row.insertCell(7);
 //var element8 = document.createElement("input");
@@ -201,7 +216,7 @@ function addRowWithData(tableID, intRowNum, entity){
     var cell1 = row.insertCell(0);
     var element1 = document.createElement("input");
     element1.type = "date";
-    element1.name="date";// + intRowNum;
+    element1.name="d" + rowCount;
     var date = new Date(entity.startTime);
     //element1.value = entity.startTime.slice(0,10);
 
@@ -220,7 +235,7 @@ function addRowWithData(tableID, intRowNum, entity){
         day = '0' + day;
     }
     element1.value = year + '-' + month + '-' + day;
-    //element1.onchange="recompute2('date_" + intRowNum + "')";
+    element1.onchange="recomputeEndHours(" + rowCount + ")";
     cell1.appendChild(element1);
     
     var cell2 = row.insertCell(1);
@@ -228,7 +243,7 @@ function addRowWithData(tableID, intRowNum, entity){
     element2.type = "time";
     element2.name="time";// + intRowNum;
     element2.value = (date.getHours()+'').padStart(2, '0') + ':' + (date.getMinutes() + '').padStart(2, '0');
-    //element2.onchange="recompute2('start_" + intRowNum + "')";
+    element2.onchange = (e) => recomputeEndHours(e, rowCount);
     cell2.appendChild(element2);
     
     var cell3 = row.insertCell(2);
@@ -237,7 +252,7 @@ function addRowWithData(tableID, intRowNum, entity){
     element3.type = "time";
     element3.name="lunchStartTime";// + intRowNum;
     element3.value = (date.getHours()+'').padStart(2, '0') + ':' + (date.getMinutes() + '').padStart(2, '0');
-    //element3.onchange="recompute2('lunchStart_" + intRowNum + "')";
+    element3.onchange = (e) => recomputeEndHours(e, rowCount);
     cell3.appendChild(element3);
     
     var cell4 = row.insertCell(3);
@@ -246,7 +261,7 @@ function addRowWithData(tableID, intRowNum, entity){
     element4.type = "time";
     element4.name="lunchEndTime";// + intRowNum;
     element4.value = (date.getHours()+'').padStart(2, '0') + ':' + (date.getMinutes() + '').padStart(2, '0');
-    //element4.onchange="recompute2('lunchEnd_" + intRowNum + "')";
+    element4.onchange = (e) => recomputeEndHours(e, rowCount);
     cell4.appendChild(element4);
     
     var cell5 = row.insertCell(4);
@@ -255,20 +270,23 @@ function addRowWithData(tableID, intRowNum, entity){
     element5.type = "time";
     element5.name="end_" + intRowNum;
     element5.value = (date.getHours()+'').padStart(2, '0') + ':' + (date.getMinutes() + '').padStart(2, '0');
-    //element5.onchange="recompute2('end_" + intRowNum + "')";
+    element5.onchange = (e) => recomputeEndHours(e, rowCount);
     cell5.appendChild(element5);
     var cell6 = row.insertCell(5);
     var element6 = document.createElement("input");
     element6.type = "number";
     element6.name="hoursLunch_" + intRowNum;
-    //element6.onchange="recompute2('hoursLunch_" + intRowNum + "')";
     cell6.appendChild(element6);
+    element6.onchange = (e) => recomputeEndHours(e, rowCount);
+
     var cell7 = row.insertCell(6);
     var element7 = document.createElement("input");
     element7.type = "number";
     element7.name="hoursTotal_" + intRowNum;
-    //element7.onchange="recompute2('hoursTotal_" + intRowNum + "')";
     cell7.appendChild(element7);
+    element7.onchange = (e) => recomputeEndHours(e, rowCount);
+    //element7.addEventListener('change', recomputeEndHours(e, rowCount));
+
     //var cell8 = row.insertCell(7);
     //var element8 = document.createElement("input");
     //element8.type = "number";
@@ -308,6 +326,53 @@ function addEntityToStorage(entity){
     setEntitiesForStorage(entities);
 }
 
+function recomputeEndHours(e, index){
+    var table = document.getElementById("mainTBL");
+    var entities = [];
+    //for(var i = 1; i < table.rows.length - 2; i++){
+    var row = table.rows[index];
+    if (row.cells[6]?.firstChild != null){
+        var date = row.cells[0].firstChild.value;
+        var time = row.cells[1].firstChild.value;
+        var lunchStart = row.cells[2].firstChild.value;
+        var endTime = row.cells[4].firstChild.value;
+        var lunchEnd = row.cells[3].firstChild.value;
+        var lunchHours = row.cells[5].firstChild.value;
+        var totalHours = row.cells[6].firstChild.value;
+        var entity = new TimesheetEntity();
+        if (time != null)
+        {
+            if (lunchHours != null && totalHours != null){
+                if (lunchHours >= 1){
+                    var hours = parseInt(lunchStart.split(':')[0]) + Math.floor(lunchHours);
+                    var minutes = parseInt(lunchStart.split(':')[1]) + (lunchHours - Math.floor(lunchHours))*60;
+                    if (minutes >= 60){
+                        minutes = minutes % 60;
+                        hours++;
+                    }
+                    lunchEnd = (hours + '').padStart(2, '0') + ':' + (minutes+ '').padStart(2,'0');
+                    row.cells[3].firstChild.value = lunchEnd;
+                }
+                if (totalHours >= 1){
+                    var hours = parseInt(time.split(':')[0]) + Math.floor(lunchHours) + Math.floor(totalHours);
+                    var minutes = parseInt(time.split(':')[1]) + Math.round(((lunchHours - Math.floor(lunchHours))*60) + (totalHours - Math.floor(totalHours))*60);
+                    if (minutes >= 120){
+                        minutes = minutes % 60;
+                        hours+=2;
+                    }
+                    else if (minutes >= 60){
+                        minutes = minutes % 60;
+                        hours++;
+                    }
+                    endTime = (hours + '').padStart(2, '0') + ':' + (minutes+ '').padStart(2,'0');
+                    row.cells[4].firstChild.value = endTime;
+                }
+            }
+        }
+    }
+    //}
+}
+
 function submitTimesheetEntities(){
     var table = document.getElementById("mainTBL");
     var entities = [];
@@ -320,7 +385,7 @@ function submitTimesheetEntities(){
         var lunchEnd = row.cells[3].firstChild.value;
         var endTime = row.cells[4].firstChild.value;
         var entity = new TimesheetEntity();
-        if (time != null)
+        if (time != '')
         {
             entity.startTime = new Date(date.split('-')[0], date.split('-')[1]-1, date.split('-')[2],
                 time.split(':')[0], time.split(':')[1]);
@@ -364,6 +429,7 @@ class TimesheetEntity{
     startTime;
     startLunch;
     endLunch;
-    endDay;    
+    endDay;
+
 }
 
