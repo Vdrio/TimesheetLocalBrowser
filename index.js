@@ -89,6 +89,8 @@ function re_compute2(inputParam)
 {
 alert(inputParam);
 }
+
+var color = '#ff0000';
 function runtimeInstantiate(){
 //var loc = window.location.pathname;
 //var dir = loc.substring(0, loc.lastIndexOf('/'));
@@ -101,10 +103,20 @@ entities.sort(function(a, b) {
 addRow("mainTBL", 1);
 for (i = 0; i < entities.length; i++) {
     var entity = entities[i];
-    addRowWithData("mainTBL", i + 2, entity);
+    var startDate = new Date(entity.startTime);
+
+    if (startDate.getDay() == 0){
+        color = changeColor();
+    }
+    addRowWithData("mainTBL", i + 2, entity, color);
 //alert("here " + i);
 }
 
+}
+
+
+function changeColor(){
+    return '#00ff00';
 }
 
 function formatDate(date) {
@@ -207,7 +219,7 @@ cell7.appendChild(element7);
 
 }
 
-function addRowWithData(tableID, intRowNum, entity){
+function addRowWithData(tableID, intRowNum, entity, color){
     var table = document.getElementById(tableID);
     
     var rowCount = table.rows.length - 2 ;
@@ -215,6 +227,7 @@ function addRowWithData(tableID, intRowNum, entity){
     
     var cell1 = row.insertCell(0);
     var element1 = document.createElement("input");
+    element1.style = "background-color:" + color;
     element1.type = "date";
     element1.name="d" + rowCount;
     var date = new Date(entity.startTime);
@@ -423,6 +436,10 @@ function getEntitiesFromStorage(){
         return [];
     }
 
+}
+
+function loadUser(userId){
+    console.log(userId);
 }
 
 class TimesheetEntity{
