@@ -91,6 +91,7 @@ alert(inputParam);
 }
 
 var color = '#ff0000';
+var downloadedAlready = false;
 function runtimeInstantiate(){
 //var loc = window.location.pathname;
 //var dir = loc.substring(0, loc.lastIndexOf('/'));
@@ -100,6 +101,7 @@ var entities = getEntitiesFromStorage();
 entities.sort(function(a, b) {
     return new Date(b.startTime).getTime() - new Date(a.startTime).getTime();
 });
+
 addRow("mainTBL", 1);
 for (i = 0; i < entities.length; i++) {
     var entity = entities[i];
@@ -110,6 +112,25 @@ for (i = 0; i < entities.length; i++) {
     }
     addRowWithData("mainTBL", i + 2, entity, color);
 //alert("here " + i);
+if (!downloadedAlready){
+    downloadedAlready = true;
+    const a = document.createElement("a");
+    a.style.display = "none";
+    document.body.appendChild(a);
+
+    // Set the HREF to a Blob representation of the data to be downloaded
+    a.href = window.URL.createObjectURL(
+        new Blob([JSON.stringify(entities)], {type: "application/json"} )
+    );
+
+    // Use download attribute to set set desired file name
+    a.setAttribute("download", 'timesheetEntities'+Date.now().toString()+'.json');
+
+    // Trigger the download by simulating click
+    a.click();
+    window.URL.revokeObjectURL(a.href);
+    document.body.removeChild(a);
+  }
 }
 
 }
