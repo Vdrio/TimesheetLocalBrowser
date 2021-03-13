@@ -227,7 +227,8 @@ function addRowWithData(tableID, intRowNum, entity, color){
     
     var cell1 = row.insertCell(0);
     var element1 = document.createElement("input");
-    element1.style = "background-color:" + color;
+    row.style = "background-color:" + color;
+    //element1.style = "background-color:" + color;
     element1.type = "date";
     element1.name="d" + rowCount;
     var date = new Date(entity.startTime);
@@ -356,7 +357,7 @@ function recomputeEndHours(e, index){
         if (time != null)
         {
             if (lunchHours != null && totalHours != null){
-                if (lunchHours >= 1){
+                if (lunchHours >= 0){
                     var hours = parseInt(lunchStart.split(':')[0]) + Math.floor(lunchHours);
                     var minutes = parseInt(lunchStart.split(':')[1]) + (lunchHours - Math.floor(lunchHours))*60;
                     if (minutes >= 60){
@@ -366,7 +367,7 @@ function recomputeEndHours(e, index){
                     lunchEnd = (hours + '').padStart(2, '0') + ':' + (minutes+ '').padStart(2,'0');
                     row.cells[3].firstChild.value = lunchEnd;
                 }
-                if (totalHours >= 1){
+                if (totalHours >= 0){
                     var hours = parseInt(time.split(':')[0]) + Math.floor(lunchHours) + Math.floor(totalHours);
                     var minutes = parseInt(time.split(':')[1]) + Math.round(((lunchHours - Math.floor(lunchHours))*60) + (totalHours - Math.floor(totalHours))*60);
                     if (minutes >= 120){
@@ -447,6 +448,5 @@ class TimesheetEntity{
     startLunch;
     endLunch;
     endDay;
-
 }
 
